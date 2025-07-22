@@ -129,4 +129,16 @@ contract TokenFaucet is ERC20, Ownable {
         uint256 balance = balanceOf(address(this));
         _transfer(address(this), owner(), balance);
     }
+
+    /**
+     * @dev New Function: Returns remaining cooldown time for msg.sender
+     */
+    function remainingCooldown() external view returns (uint256 secondsLeft) {
+        uint256 last = lastRequestTime[msg.sender];
+        if (block.timestamp >= last + COOLDOWN_PERIOD) {
+            return 0;
+        } else {
+            return (last + COOLDOWN_PERIOD) - block.timestamp;
+        }
+    }
 }
